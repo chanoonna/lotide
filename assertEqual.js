@@ -4,15 +4,15 @@ const assertEqual = function(actual, expected) {
   const typedExpected = getType(expected);
   
   if (actual !== expected) {
-    console.log('🔴 Assertion Failed: ' + typedActual + ' !== ' + typedExpected);
+    console.log(`🔴 Assertion Failed: ${typedActual} !== ${typedExpected}`);
   } else {
-    console.log('🟢 Assertion Passed: ' + typedActual + ' === ' + typedExpected);
+    console.log(`🟢 Assertion Passed: ${typedActual} === ${typedExpected}`);
   }
 };
 
 const getType = (input) => {
   if (typeof input === 'string') {
-    return '"' + input + '"';
+    return `"${input}"`;
   } else {
     return input;
   }
