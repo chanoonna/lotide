@@ -50,7 +50,16 @@ const flattenRecursion = (input) => {
   return input.reduce((accumulator, currentValue) =>
     Array.isArray(currentValue) ? accumulator.concat(flattenRecursion(currentValue)) : accumulator.concat(currentValue), []);
 };
-
+/*
+  .reduce() takes an array, and does whatever the callback function does.
+  Since, the call back function returns concatenated array so as it iterates through the array,
+  the function concatenates array elements one by one to the empty array (at the end of the return statement)
+  When it hits the point where the array element is another array (nested array), it will just concatenate the whole array
+  because that array is considered just a single element for the outer array.
+  If we can flatten the nested array into just a flat array, we can concatenate it as a single array.
+  So instead of just concatenating the element (nested array), we can call flattenRecursion again and deal with the nested array first.
+  Since the previous calls will wait in stack area for the function to finish concatenation of nested array, it won't just add the nested array.
+*/
 // More detailed version
 
 // const flattenRecursion = (input) => {
@@ -63,9 +72,13 @@ const flattenRecursion = (input) => {
 //   }, []);
 // };
 
+
+
+
+
 assertArraysEqual(flatten([1, 2, 5, [5, 6], [2, 2, [2, 4]], 1, 2, 3]), [1, 2, 5, 5, 6, 2, 2, 2, 4, 1, 2, 3]);
 assertArraysEqual(flatten([1, [2, [3, [4, [5]]]]]), [1, 2, 3, 4, 5]);
-console.log("If we don't treat nested arrays, assertArraysEqual will fail")
+console.log("If we don't treat nested arrays, assertArraysEqual will fail");
 console.log("-------------------------");
 assertArraysEqual(flattenRecursion([1, 2, 5, [5, 6], [2, 2, [2, 4]], 1, 2, 3]), [1, 2, 5, 5, 6, 2, 2, 2, 4, 1, 2, 3]);
 assertArraysEqual(flattenRecursion([1, [2, [3, [4, [5]]]]]), [1, 2, 3, 4, 5]);

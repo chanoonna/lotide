@@ -47,14 +47,36 @@ const getType = (input) => {
   }
 };
 
-assertEqual(eqArrays([1, 2, 3], [1, 2, 3]), true); // => true
-assertEqual(eqArrays([1, 2, 3], [3, 2, 1]), true); // => false
+// Recursive eqArrays
 
-assertEqual(eqArrays([], []), true); // => true
-assertEqual(eqArrays([1], [3, 2, 1]), true); // => false
+const eqArraysRecursion = (target, compare, index) => {
+  if (target.length !== compare.length)
+    return false;
+  let result = true;
+  if (index < target.length) {
+    if (Array.isArray(target[index]) && Array.isArray(compare[index])) {
+      result = eqArraysRecursion(target[index], compare[index], 0);
+    } else if (target[index] !== compare[index]) {
+      result = false;
+    } else {
+      result = eqArraysRecursion(target, compare, index + 1);
+    }
+  }
+  return result;
+};
 
-assertEqual(eqArrays(["1", "2", "3"], ["1", "2", "3"]), true); // => true
-assertEqual(eqArrays(["1", "2", "3"], ["1", "2", 3]), true); // => false
+console.log(eqArraysRecursion([1, 2, 3, 4], [1, 2, 3, 4], 0));
+console.log(eqArraysRecursion([1, 2, 3, [3, 4, [5, 6]]], [1, 2, 3, [3, 4, [5, 6]]], 0));
+console.log(eqArraysRecursion([1, 2, [3, 4]], [1, 2, 3, 4], 0));
 
-assertEqual(eqArrays(["Hello", "Vancouver"], ["Hello", "Vancouver"]), true); // => true
-assertEqual(eqArrays(["Hello", "Vancouver"], ["hello", "vancouver"]), true); // => false
+assertEqual(eqArraysRecursion([1, 2, 3], [1, 2, 3], 0), true); // => true
+assertEqual(eqArraysRecursion([1, 2, 3], [3, 2, 1], 0), true); // => false
+
+assertEqual(eqArraysRecursion([], [], 0), true); // => true
+assertEqual(eqArraysRecursion([1], [3, 2, 1], 0), true); // => false
+
+assertEqual(eqArraysRecursion(["1", "2", "3"], ["1", "2", "3"], 0), true); // => true
+assertEqual(eqArraysRecursion(["1", "2", "3"], ["1", "2", 3], 0), true); // => false
+
+assertEqual(eqArraysRecursion(["Hello", "Vancouver"], ["Hello", "Vancouver"], 0), true); // => true
+assertEqual(eqArraysRecursion(["Hello", "Vancouver"], ["hello", "vancouver"], 0), true); // => false

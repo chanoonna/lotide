@@ -30,6 +30,22 @@ const without = (target, removeThese) => {
   return newArray;
 };
 
+const eqArrays = (target, compare, index) => {
+  if (target.length !== compare.length)
+    return false;
+  let result = true;
+  if (index < target.length) {
+    if (Array.isArray(target[index]) && Array.isArray(compare[index])) {
+      result = eqArrays(target[index], compare[index], 0);
+    } else if (target[index] !== compare[index]) {
+      result = false;
+    } else {
+      result = eqArrays(target, compare, index + 1);
+    }
+  }
+  return result;
+};
+
 const assertArraysEqual = (actual, expected) => {
   const result = eqArrays(actual, expected);
 
@@ -38,20 +54,6 @@ const assertArraysEqual = (actual, expected) => {
   } else {
     console.log(`🔴 Assertion Failed: ${actual} !== ${expected}`);
   }
-};
-
-const eqArrays = (arr1, arr2) => {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
-
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
-
-  return true;
 };
 
 assertArraysEqual(without([1, 2, 3], [1]), [2, 3]); // => [2, 3]
