@@ -47,7 +47,7 @@ const eqArrays = (target, compare, index) => {
 };
 
 const assertArraysEqual = (actual, expected) => {
-  const result = eqArrays(actual, expected);
+  const result = eqArrays(actual, expected, 0);
 
   if (result) {
     console.log(`🟢 Assertion Passed: ${actual} === ${expected}`);
