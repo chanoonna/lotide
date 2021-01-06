@@ -17,21 +17,13 @@ const getType = (input) => {
   }
 };
 
-const head = (arr) => {
-  if (arr.length > 0) {
-    return arr[0];
-  } else {
-    return undefined;
-  }
-};
-
 const tail = (arr) => {
   if (arr.length > 1) {
     return [...arr].slice(1);
   } else {
     return [];
   }
-}
+};
 
 
 const testStuff1 = ["Hello", "Lighthouse", "Labs"];
