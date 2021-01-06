@@ -18,11 +18,9 @@
 //   or maybe I can just skip the whole thing and return reduce itself
 // }
 
-const flatten = (arr) => {
-  return arr.reduce((accumulator, currentValue) => accumulator.concat(currentValue), []);
+const flatten = (input) => {
+  return input.reduce((accumulator, currentValue) => accumulator.concat(currentValue), []);
 };
-
-console.log(flatten([1, 2, 5, [5, 6], [2, 2, [2, 4]], 1, 2, 3]));
 
 const assertArraysEqual = (actual, expected) => {
   const result = eqArrays(actual, expected);
@@ -47,3 +45,28 @@ const eqArrays = (arr1, arr2) => {
 
   return true;
 };
+
+const flattenRecursion = (input) => {
+  return input.reduce((accumulator, currentValue) =>
+    Array.isArray(currentValue) ? accumulator.concat(flattenRecursion(currentValue)) : accumulator.concat(currentValue), []);
+};
+
+// More detailed version
+
+// const flattenRecursion = (input) => {
+//   return input.reduce(function(accumulator, currentValue) {
+//     if (Array.isArray(currentValue)) {
+//       return accumulator.concat(flattenRecursion(currentValue));
+//     } else {
+//       return accumulator.concat(currentValue);
+//     }
+//   }, []);
+// };
+
+assertArraysEqual(flatten([1, 2, 5, [5, 6], [2, 2, [2, 4]], 1, 2, 3]), [1, 2, 5, 5, 6, 2, 2, 2, 4, 1, 2, 3]);
+assertArraysEqual(flatten([1, [2, [3, [4, [5]]]]]), [1, 2, 3, 4, 5]);
+console.log("If we don't treat nested arrays, assertArraysEqual will fail")
+console.log("-------------------------");
+assertArraysEqual(flattenRecursion([1, 2, 5, [5, 6], [2, 2, [2, 4]], 1, 2, 3]), [1, 2, 5, 5, 6, 2, 2, 2, 4, 1, 2, 3]);
+assertArraysEqual(flattenRecursion([1, [2, [3, [4, [5]]]]]), [1, 2, 3, 4, 5]);
+console.log("If we treat nested arrays recursively, assertArraysEqual test passes.");
