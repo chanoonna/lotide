@@ -22,9 +22,10 @@
 // }
 
 const eqObjects = (object1, object2) => {
-  let result = true;
+  const isObject = (object) => typeof object === "object" ? true : false;
+  let result = true;                                                // Helper function to check whether the property is an object or not.
 
-  for (const [ prop, val ] of Object.entries(object1)) {
+  for (const prop of Object.keys(object1)) {
     if (!object2.hasOwnProperty(prop)) {                            // !object2[prop] will return false in cases with number 0
       return false;
     }
@@ -41,8 +42,6 @@ const eqObjects = (object1, object2) => {
 
   return result;
 };
-
-const isObject = (object) => typeof object === "object" ? true : false;
 
 const assertEqual = function(actual, expected) {
   const typedActual = getType(actual);
@@ -77,6 +76,7 @@ const eqArrays = (target, compare, index) => {
   if (target.length !== compare.length)
     return false;
   let result = true;
+  
   if (index < target.length) {
     if (Array.isArray(target[index]) && Array.isArray(compare[index])) {
       result = eqArrays(target[index], compare[index], 0);
