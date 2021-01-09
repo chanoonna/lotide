@@ -14,18 +14,47 @@
 //   so return true
 // }
 
-const eqArrays = (arr1, arr2) => {
+const eqArrays = function(arr1, arr2, index) {
   if (arr1.length !== arr2.length) {
     return false;
   }
+  const isObject = (object) => typeof object === "object" ? true : false;
+  let result = true;
 
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
+  if (index < arr1.length) {
+    if (Array.isArray(arr1[index]) && Array.isArray(arr2[index])) {
+      result = eqArrays(arr1[index], arr2[index], 0);
+    } else if(isObject(arr1[index]) && isObject(arr2[index])) {
+      result = eqObjects(arr1[index], arr2[index]);
+    } else if (arr1[index] !== arr2[index]) {
+      result = false;
+    } else {
+      result = eqArrays(arr1, arr2, index + 1);
+    }
+  }
+  return result;
+};
+
+const eqObjects = (object1, object2) => {
+  const isObject = (object) => typeof object === "object" ? true : false;
+  let result = true;                                                // Helper function to check whether the property is an object or not.
+
+  for (const prop of Object.keys(object1)) {
+    if (!object2.hasOwnProperty(prop)) {                            // !object2[prop] will return false in cases with number 0
       return false;
+    }
+    if (object1[prop] !== object2[prop]) {                          // When the values are different, there can be 2 different cases
+      if (Array.isArray(object1[prop])) {                           // One would the values are primitive and they are not equal
+        result = eqArrays(object1[prop], object2[prop], 0);         // The other is that they are ference types so their addresses are different
+      } else if (isObject(object1[prop])) {                         // So we need to see if the property of the objects are whether primitive or not
+        result = eqObjects(object1[prop], object2[prop]);           // We can call eqArrays to check if they are identical arrays,
+      } else {                                                      // or isObject for nested objects. If so, it will call itself recursively
+        return false;
+      }
     }
   }
 
-  return true;
+  return result;
 };
 
 const assertEqual = function(actual, expected) {
@@ -47,36 +76,18 @@ const getType = (input) => {
   }
 };
 
-// Recursive eqArrays
+console.log(eqArrays([1, 2, 3, 4, { abc: 15 }], [1, 2, 3, 4, { abc: 15 }], 0));
+console.log(eqArrays([1, 2, 3, [3, 4, [5, 6]]], [1, 2, 3, [3, 4, [5, 6]]], 0));
+console.log(eqArrays([1, 2, [3, 4]], [1, 2, 3, 4], 0));
 
-const eqArraysRecursion = (target, compare, index) => {
-  if (target.length !== compare.length)
-    return false;
-  let result = true;
-  if (index < target.length) {
-    if (Array.isArray(target[index]) && Array.isArray(compare[index])) {
-      result = eqArraysRecursion(target[index], compare[index], 0);
-    } else if (target[index] !== compare[index]) {
-      result = false;
-    } else {
-      result = eqArraysRecursion(target, compare, index + 1);
-    }
-  }
-  return result;
-};
+assertEqual(eqArrays([1, 2, [ 1, 2, { abc: [1, 2, 3], ccc: "string" } ],  3], [1, 2, [ 1, 2, { abc: [1, 2, 3], ccc: "string" } ],  3], 0), true); // => true
+assertEqual(eqArrays([1, 2, 3], [3, 2, 1], 0), false); // => false
 
-console.log(eqArraysRecursion([1, 2, 3, 4], [1, 2, 3, 4], 0));
-console.log(eqArraysRecursion([1, 2, 3, [3, 4, [5, 6]]], [1, 2, 3, [3, 4, [5, 6]]], 0));
-console.log(eqArraysRecursion([1, 2, [3, 4]], [1, 2, 3, 4], 0));
+assertEqual(eqArrays([], [], 0), true); // => true
+assertEqual(eqArrays([1], [3, 2, 1], 0), false); // => false
 
-assertEqual(eqArraysRecursion([1, 2, 3], [1, 2, 3], 0), true); // => true
-assertEqual(eqArraysRecursion([1, 2, 3], [3, 2, 1], 0), true); // => false
+assertEqual(eqArrays(["1", "2", "3"], ["1", "2", "3"], 0), true); // => true
+assertEqual(eqArrays(["1", "2", "3"], ["1", "2", 3], 0), false); // => false
 
-assertEqual(eqArraysRecursion([], [], 0), true); // => true
-assertEqual(eqArraysRecursion([1], [3, 2, 1], 0), true); // => false
-
-assertEqual(eqArraysRecursion(["1", "2", "3"], ["1", "2", "3"], 0), true); // => true
-assertEqual(eqArraysRecursion(["1", "2", "3"], ["1", "2", 3], 0), true); // => false
-
-assertEqual(eqArraysRecursion(["Hello", "Vancouver"], ["Hello", "Vancouver"], 0), true); // => true
-assertEqual(eqArraysRecursion(["Hello", "Vancouver"], ["hello", "vancouver"], 0), true); // => false
+assertEqual(eqArrays(["Hello", "Vancouver"], ["Hello", "Vancouver"], 0), true); // => true
+assertEqual(eqArrays(["Hello", "Vancouver"], ["hello", "vancouver"], 0), false); // => false

@@ -72,18 +72,22 @@ const assertArraysEqual = (actual, expected) => {
   }
 };
 
-const eqArrays = (target, compare, index) => {
-  if (target.length !== compare.length)
+const eqArrays = function(arr1, arr2, index) {
+  if (arr1.length !== arr2.length) {
     return false;
+  }
+  const isObject = (object) => typeof object === "object" ? true : false;
   let result = true;
-  
-  if (index < target.length) {
-    if (Array.isArray(target[index]) && Array.isArray(compare[index])) {
-      result = eqArrays(target[index], compare[index], 0);
-    } else if (target[index] !== compare[index]) {
+
+  if (index < arr1.length) {
+    if (Array.isArray(arr1[index]) && Array.isArray(arr2[index])) {
+      result = eqArrays(arr1[index], arr2[index], 0);
+    } else if(isObject(arr1[index]) && isObject(arr2[index])) {
+      result = eqObjects(arr1[index], arr2[index]);
+    } else if (arr1[index] !== arr2[index]) {
       result = false;
     } else {
-      result = eqArrays(target, compare, index + 1);
+      result = eqArrays(arr1, arr2, index + 1);
     }
   }
   return result;
