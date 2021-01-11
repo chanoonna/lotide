@@ -1,4 +1,7 @@
 const countLetters = function(str) {
+  if (typeof str !== "string") {
+    throw new TypeError("The argument is not a string.");
+  }
   if (str.length === 0) {
     return returnObj;
   }
