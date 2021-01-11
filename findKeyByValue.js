@@ -1,4 +1,4 @@
-const findKeyByValue = (inputObj, valToSearch) => {
+const findKeyByValue = function(inputObj, valToSearch) {
   for (const [ prop, val ] of Object.entries(inputObj)) {
     if (val === valToSearch) {
       return prop;

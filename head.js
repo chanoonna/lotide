@@ -1,9 +1,3 @@
-const head = (arr) => {
-  if (arr.length > 0) {
-    return arr[0];
-  } else {
-    return undefined;
-  }
-};
+const head = (arr) => arr.length > 0 ? arr[0] : undefined;
 
 module.exports = head;

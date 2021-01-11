@@ -1,6 +1,7 @@
-const eqObjects = (object1, object2) => {
-  const isObject = require('./isObject.js');
-  const eqArrays = require('./eqArrays.js');
+const isObject = require('./isObject.js');
+const eqArrays = require('./eqArrays.js');
+
+const eqObjects = function(object1, object2) {
   let result = true;
 
   for (const prop of Object.keys(object1)) {

@@ -1,9 +1,3 @@
-const tail = (arr) => {
-  if (arr.length > 1) {
-    return [...arr].slice(1);
-  } else {
-    return [];
-  }
-};
+const tail = (arr) => arr.length > 1 ? arr.slice(1) : [];
 
 module.exports = tail;

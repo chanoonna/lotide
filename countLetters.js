@@ -1,4 +1,4 @@
-const countLetters = (str) => {
+const countLetters = function(str) {
   if (str.length === 0) {
     return returnObj;
   }
