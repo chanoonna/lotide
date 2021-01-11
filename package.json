@@ -1,0 +1,26 @@
+{
+  "name": "lotide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "assertArraysEqual.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chanoonna/lotide.git"
+  },
+  "author": "Chan-oon Na",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chanoonna/lotide/issues"
+  },
+  "homepage": "https://github.com/chanoonna/lotide#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
+  }
+}
